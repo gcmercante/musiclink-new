@@ -6,7 +6,7 @@
     aside {
         flex: 6;
 
-        background: #835afd;
+        background: #262626;
         color: #fff;
 
         display: flex;
@@ -16,7 +16,7 @@
         padding: 120px 80px;
 
         img {
-            max-width: 320px;
+            max-width: 400px;
         }
 
         strong {
@@ -50,6 +50,7 @@
 
             > img {
                 align-self: center;
+                max-width: 200px;
             }
 
             form {
@@ -59,29 +60,24 @@
                     border-radius: 8px;
                     padding: 0 16px;
                     background: #FFF;
-                    border: 1px solid #a8a8b3;
+                    border: 1px solid #262626;
+                    color: #262626;
                 }
 
                 button, input {
                     width: 100%;
                     margin: 8px 0;
+
+                    &:focus{
+                        box-shadow: 0 0 0 2px #EB9D0E;
+                        border: none;
+                        outline: none;
+                    }
                 }
             }
 
             .signup-form {
                 margin-top: 0;
-                input {
-                    height: 50px;
-                    border-radius: 8px;
-                    padding: 0 16px;
-                    background: #FFF;
-                    border: 1px solid #a8a8b3;
-                }
-
-                button, input {
-                    width: 100%;
-                    margin: 8px 0;
-                }
             }
 
             p {
@@ -90,7 +86,7 @@
                 margin-top: 8px;
 
                 a {
-                    color: #e559f9;
+                    color: #EB9D0E;
                 }
             }
 
@@ -146,7 +142,7 @@
                 height: 50px;
                 border-radius:8px;
                 font-weight: 500;
-                background: #ea4335;
+                background: #EB9D0E;
                 color: #fff;
                 display: flex;
                 justify-content: center;
@@ -168,7 +164,7 @@
                 height: 50px;
                 border-radius:8px;
                 font-weight: 500;
-                background: #ea4335;
+                background: #EB9D0E;
                 color: #fff;
                 display: flex;
                 justify-content: center;
@@ -184,6 +180,12 @@
 
                 &:hover {
                     filter: brightness(0.8);
+                }
+
+                &:focus {
+                    box-shadow: 0 0 0 2px #262626;
+                    border: none;
+                    outline: none;
                 }
             }
         }

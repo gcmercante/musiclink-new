@@ -5,7 +5,7 @@ import { AuthContextProvider } from './contexts/AuthContext';
 import { Feed } from './pages/Feed';
 import { Home } from "./pages/Home";
 import { Login } from "./pages/Login";
-import { SignUp } from './pages/SingUp';
+import { SignUp } from './pages/SignUp';
 
 function App() {
     return (

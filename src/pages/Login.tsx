@@ -4,8 +4,8 @@ import { useAuth } from '../hooks/useAuth';
 
 import { Button } from '../components/Button';
 
-import illustrationImg from '../assets/images/illustration.svg';
-import logoImg from '../assets/images/logo.svg';
+import logoSolo from '../assets/images/musiclink-logo-solo.svg';
+import logoImg from '../assets/images/musiclink-logo2.svg';
 import googleImg from '../assets/images/google-icon.svg'
 import '../styles/auth.scss';
 
@@ -21,17 +21,21 @@ export function Login() {
 
         history.push('/feed');
     }
+
+    async function handleEmailLogin() {
+        history.push('/feed');
+    }
     return (
         <div id="page-auth">
             <aside>
-                <img src={illustrationImg} alt="Ilustração" />
+                <img src={logoSolo} alt="Ilustração" />
                 <strong>Crie sua conta agora mesmo!</strong>
                 <p>Entre em uma comunidade única para musicos</p>
             </aside>
             <main>
                 <div className="main-content">
                     <img src={logoImg} alt="Musiclink" />
-                    <form>
+                    <form onSubmit={handleEmailLogin}>
                         <input 
                             type="text"
                             placeholder="Email"

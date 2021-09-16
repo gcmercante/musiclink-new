@@ -4,8 +4,8 @@ import { useAuth } from '../hooks/useAuth';
 
 import { Button } from '../components/Button';
 
-import illustrationImg from '../assets/images/illustration.svg';
-import logoImg from '../assets/images/logo.svg';
+import logoSolo from '../assets/images/musiclink-logo-solo.svg';
+import logoImg from '../assets/images/musiclink-logo2.svg';
 import googleImg from '../assets/images/google-icon.svg'
 
 import '../styles/auth.scss';
@@ -25,7 +25,7 @@ export function SignUp() {
     return (
         <div id="page-auth">
             <aside>
-                <img src={illustrationImg} alt="Ilustração" />
+                <img src={logoSolo} alt="Ilustração" />
                 <strong>Crie sua conta agora mesmo!</strong>
                 <p>Entre em uma comunidade única para musicos</p>
             </aside>
@@ -39,28 +39,18 @@ export function SignUp() {
                     <div className="separator-2">ou</div>
                     <form className="signup-form">
                         <input 
-                            type="text"
-                            placeholder="Email"
+                            type="email"
+                            placeholder="Email *"
+                            required
+                        />
+                        <input 
+                            type="password"
+                            placeholder="Senha *"
                             required
                         />
                         <input 
                             type="text"
-                            placeholder="Confirme seu email"
-                            required
-                        />
-                        <input 
-                            type="text"
-                            placeholder="Senha"
-                            required
-                        />
-                        <input 
-                            type="text"
-                            placeholder="Confirme sua senha"
-                            required
-                        />
-                        <input 
-                            type="text"
-                            placeholder="Nome"
+                            placeholder="Nome *"
                             required
                         />
                         <input
@@ -76,10 +66,10 @@ export function SignUp() {
                                 (e)=> {
                                     e.currentTarget.type = "text";
                                     e.currentTarget.blur();
-                                    e.currentTarget.placeholder = 'Data nascimento';
+                                    e.currentTarget.placeholder = 'Data nascimento *';
                                 }
                             }
-                            placeholder="Data nascimento"
+                            placeholder="Data nascimento *"
                         />
                         <Button type="submit">
                             Entrar
