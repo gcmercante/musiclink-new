@@ -1,6 +1,7 @@
 import { useHistory } from 'react-router-dom';
 
-import { useGoogleAuth } from '../hooks/useGoogleAuth';
+import { useAuth } from '../hooks/useAuth';
+import { googleAuth } from '../services/authProviders';
 
 import { Button } from '../components/Button';
 
@@ -12,7 +13,7 @@ import '../styles/auth.scss';
 
 export function Home() {
     const history = useHistory();
-    const { user, signInWithGoogle } = useGoogleAuth();
+    const { user, signIn } = useAuth();
 
     function navigate(path: string) {
         history.push(path);
@@ -20,7 +21,7 @@ export function Home() {
 
     async function handleGoogleLogin() {
         if (!user) {
-            await signInWithGoogle();
+            await signIn(googleAuth, 'Google');
         }
 
         history.push('/feed');
