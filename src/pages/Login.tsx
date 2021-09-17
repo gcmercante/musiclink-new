@@ -1,10 +1,11 @@
+import { FormEvent } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 
-import { useAuth } from '../hooks/useAuth';
+import { useGoogleAuth } from '../hooks/useGoogleAuth';
 
 import { Button } from '../components/Button';
 
-import logoSolo from '../assets/images/musiclink-logo-solo.svg';
+import logoSolo from '../assets/images/musiclink-logo-solo2.svg';
 import logoImg from '../assets/images/musiclink-logo2.svg';
 import googleImg from '../assets/images/google-icon.svg'
 import '../styles/auth.scss';
@@ -12,7 +13,7 @@ import '../styles/auth.scss';
 
 export function Login() {
     const history = useHistory();
-    const { user, signInWithGoogle } = useAuth();
+    const { user, signInWithGoogle } = useGoogleAuth();
 
     async function handleGoogleLogin() {
         if (!user) {
@@ -22,7 +23,8 @@ export function Login() {
         history.push('/feed');
     }
 
-    async function handleEmailLogin() {
+    async function handleEmailLogin(event:FormEvent) {
+        event.preventDefault();
         history.push('/feed');
     }
     return (

@@ -1,9 +1,9 @@
 import { Link } from "react-router-dom";
 
-import { useAuth } from "../hooks/useAuth";
+import { useGoogleAuth } from "../hooks/useGoogleAuth";
 
 export function Feed() {
-    const { user } = useAuth();
+    const { user } = useGoogleAuth();
     return (
         <div>
             <div>{ user?.id }</div>

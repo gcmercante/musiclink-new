@@ -1,10 +1,10 @@
 import { useHistory } from 'react-router-dom';
 
-import { useAuth } from '../hooks/useAuth';
+import { useGoogleAuth } from '../hooks/useGoogleAuth';
 
 import { Button } from '../components/Button';
 
-import logoSolo from '../assets/images/musiclink-logo-solo.svg';
+import logoSolo from '../assets/images/musiclink-logo-solo2.svg';
 import logoImg from '../assets/images/musiclink-logo2.svg';
 import googleImg from '../assets/images/google-icon.svg'
 
@@ -12,7 +12,7 @@ import '../styles/auth.scss';
 
 export function Home() {
     const history = useHistory();
-    const { user, signInWithGoogle } = useAuth();
+    const { user, signInWithGoogle } = useGoogleAuth();
 
     function navigate(path: string) {
         history.push(path);

@@ -7,18 +7,18 @@ type User = {
     avatar: string,
 }
 
-type AuthContextType = {
+type GoogleAuthContextType = {
     user: User | undefined,
     signInWithGoogle: () => Promise<void>,
 }
 
-type AuthContextProviderProps = {
+type GoogleAuthContextProviderProps = {
     children: ReactNode
 }
 
-export const AuthContext = createContext({} as AuthContextType);
+export const GoogleAuthContext = createContext({} as GoogleAuthContextType);
 
-export function AuthContextProvider(props: AuthContextProviderProps) {
+export function GoogleAuthContextProvider(props: GoogleAuthContextProviderProps) {
     const [user, setUser] = useState<User>();
 
     useEffect(() => {
@@ -62,8 +62,8 @@ export function AuthContextProvider(props: AuthContextProviderProps) {
     }
     
     return (
-        <AuthContext.Provider value={{ user, signInWithGoogle }}>
+        <GoogleAuthContext.Provider value={{ user, signInWithGoogle }}>
             { props.children }
-        </AuthContext.Provider>
+        </GoogleAuthContext.Provider>
     );
 }

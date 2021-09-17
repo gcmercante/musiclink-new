@@ -1,6 +1,6 @@
 import { BrowserRouter, Route } from 'react-router-dom';
 
-import { AuthContextProvider } from './contexts/AuthContext';
+import { GoogleAuthContextProvider } from './contexts/GoogleAuthContext';
 
 import { Feed } from './pages/Feed';
 import { Home } from "./pages/Home";
@@ -10,12 +10,12 @@ import { SignUp } from './pages/SignUp';
 function App() {
     return (
         <BrowserRouter>
-            <AuthContextProvider>
+            <GoogleAuthContextProvider>
                 <Route path="/" exact component={Home} />
                 <Route path="/login" component={Login} />
                 <Route path="/signup" component={SignUp} />
                 <Route path="/feed" component={Feed} />
-            </AuthContextProvider>
+            </GoogleAuthContextProvider>
         </BrowserRouter>
     );
 }

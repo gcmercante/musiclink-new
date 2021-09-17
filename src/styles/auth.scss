@@ -13,10 +13,10 @@
         flex-direction: column;
         justify-content: center;
 
-        padding: 120px 80px;
+        padding: 120px 50px;
 
         img {
-            max-width: 400px;
+            max-width: 550px;
         }
 
         strong {
@@ -158,6 +158,12 @@
 
                 &:hover {
                     filter: brightness(0.8);
+                }
+
+                &:focus {
+                    box-shadow: 0 0 0 2px #262626;
+                    border: none;
+                    outline: none;
                 }
             }
             .google-login-2 {
