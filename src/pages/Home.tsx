@@ -21,7 +21,7 @@ export function Home() {
 
     async function handleGoogleLogin() {
         if (!user) {
-            await signIn(googleAuth, 'Google');
+            await signIn(googleAuth, 'google');
         }
 
         history.push('/feed');

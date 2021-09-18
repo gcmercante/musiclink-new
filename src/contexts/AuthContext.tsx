@@ -3,13 +3,22 @@ import { auth, firebase } from "../services/firebase";
 
 type User = {
     id: string,
-    name: string,
-    avatar: string,
+    name: string | null,
+    avatar: string | null,
+    providerId?: string
+}
+
+export type EmailUser = {
+    email?: string,
+    password?: string,
+    name?: string,
+    birthday?: string
 }
 
 type AuthContextType = {
     user: User | undefined,
-    signIn: (provider: firebase.auth.AuthProvider, providerType: string) => Promise<void>,
+    signIn: (provider: firebase.auth.AuthProvider, providerType: string, user?: EmailUser) => Promise<void>,
+    signUp: ({ email, password }: EmailUser) => Promise<void>
 }
 
 type AuthContextProviderProps = {
@@ -17,39 +26,67 @@ type AuthContextProviderProps = {
 }
 
 type AuthProvidersType = {
-    [key: string]: (user: firebase.UserInfo) => void;
+    [key: string]: (user: firebase.User) => void;
 }
 
 export const AuthContext = createContext({} as AuthContextType);
 
 export function AuthContextProvider(props: AuthContextProviderProps) {
-    const [user, setUser] = useState<User>();
+    const [ user, setUser ] = useState<User>();
 
     const authProviders: AuthProvidersType = {
-        Google: (user: firebase.UserInfo) => {
-            const { displayName, photoURL, uid } = user;
-            if (!displayName || !photoURL) {
-                throw new Error('Missing info from Google Account');
-            }
+        google: (googleUser: firebase.User) => {
+            const { displayName, photoURL, uid } = googleUser;
             setUser({
                 id: uid,
                 name: displayName,
-                avatar: photoURL
+                avatar: photoURL,
+                providerId: 'google'
+            });
+        },
+        email: (emailUser: firebase.User) => {
+            const { displayName, photoURL, uid } = emailUser;
+            setUser({
+                id: uid,
+                name: displayName,
+                avatar: photoURL,
+                providerId: 'email'
             });
         }
     }
 
-    const providers = [
-        'Google',
-        'Email',
-    ]
-
     useEffect(() => {
         const unsubscribe = auth.onAuthStateChanged(user => {
             if(user) {
+                const authProvidersEffect: AuthProvidersType = {
+                    google: (googleUser: firebase.User) => {
+                        const { displayName, photoURL, uid } = googleUser;
+                        setUser({
+                            id: uid,
+                            name: displayName,
+                            avatar: photoURL,
+                            providerId: 'google'
+                        });
+                    },
+                    email: (emailUser: firebase.User) => {
+                        const { displayName, photoURL, uid } = emailUser;
+                        setUser({
+                            id: uid,
+                            name: displayName,
+                            avatar: photoURL,
+                            providerId: 'email'
+                        });
+                    }
+                }
+                const providers = [
+                    'google',
+                    'email',
+                ];
                 providers.forEach(provider => {
-                    if(authProviders.hasOwnProperty(provider)) {
-                        authProviders[provider](user);
+                    if(authProvidersEffect.hasOwnProperty(provider)) {
+                        if(user.providerData[0]?.providerId === provider) {
+                            authProvidersEffect[provider](user);
+                        }
                     }
                 });
             }
@@ -60,15 +97,40 @@ export function AuthContextProvider(props: AuthContextProviderProps) {
         }
     }, [])
 
-    async function signIn(provider: firebase.auth.AuthProvider, providerType: string) {
-        const result = await auth.signInWithPopup(provider);
-        if (result.user) {
-            authProviders[providerType](result.user);
+    async function signIn(provider: firebase.auth.AuthProvider, providerType: string, user?: EmailUser) {
+        try {
+            if(providerType !== 'Email') {
+                const result = await auth.signInWithPopup(provider);
+                if (result.user) {
+                    authProviders[providerType](result.user);
+                }
+            } else {
+                if(user && user.email && user.password) {
+                    const result = await auth.signInWithEmailAndPassword(user.email, user.password);
+                    if (result.user) {
+                        authProviders[providerType](result.user);
+                    }
+                }
+            }
+        } catch (error) {
+            
         }
     }
+
+    async function signUp({ email, password }: EmailUser) {
+        if(email && password) {
+            await auth.createUserWithEmailAndPassword(email, password);
+        }
+    }
+
+    const value = { 
+        user, 
+        signIn, 
+        signUp 
+    };
     
     return (
-        <AuthContext.Provider value={{ user, signIn }}>
+        <AuthContext.Provider value={ value }>
             { props.children }
         </AuthContext.Provider>
     );

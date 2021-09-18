@@ -1,8 +1,10 @@
+import { FormEvent, useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 
 import { useAuth } from '../hooks/useAuth';
 import { googleAuth } from '../services/authProviders';
 
+import { EmailUser } from '../contexts/AuthContext';
 import { Button } from '../components/Button';
 
 import logoSolo from '../assets/images/musiclink-logo-solo2.svg';
@@ -13,14 +15,33 @@ import '../styles/auth.scss';
 
 export function SignUp() {
     const history = useHistory();
-    const { user, signIn } = useAuth();
+    const { user, signIn, signUp } = useAuth();
+    const [ info, setInfo ] = useState<EmailUser>();
+    const [ doing, setDoing ] = useState<boolean>();
+    const [ error, setError ] = useState<boolean>();
 
     async function handleGoogleLogin() {
         if (!user) {
-            await signIn(googleAuth, 'Google');
+            await signIn(googleAuth, 'google');
         }
 
         history.push('/feed');
+    }
+
+    async function handleSubmit(e:FormEvent) {
+        e.preventDefault();
+        try {
+            if(!user && info) {
+                setError(false);
+                setDoing(true);
+                await signUp(info);
+            }
+    
+            history.push('/feed');
+        } catch {
+            setError(true);
+        }
+        setDoing(false);
     }
     
     return (
@@ -38,20 +59,26 @@ export function SignUp() {
                         Criar conta com a conta Google
                     </button>
                     <div className="separator-2">ou</div>
-                    <form className="signup-form">
+                    <form className="signup-form" onSubmit={ handleSubmit }>
                         <input 
                             type="email"
                             placeholder="Email *"
+                            style={ error ? { borderColor: "red" } : {}}
+                            onChange={e => setInfo({ ...info, email: e.target.value })}
                             required
                         />
                         <input 
                             type="password"
                             placeholder="Senha *"
+                            style={ error ? { borderColor: "red" } : {}}
+                            onChange={e => setInfo({ ...info, password: e.target.value })}
                             required
                         />
                         <input 
                             type="text"
                             placeholder="Nome *"
+                            style={ error ? { borderColor: "red" } : {}}
+                            onChange={e => setInfo({ ...info, name: e.target.value })}
                             required
                         />
                         <input
@@ -71,8 +98,10 @@ export function SignUp() {
                                 }
                             }
                             placeholder="Data nascimento *"
+                            onChange={e => setInfo({ ...info, birthday: e.target.value })}
+                            style={ error ? { borderColor: "red" } : {}}
                         />
-                        <Button type="submit">
+                        <Button type="submit" disabled={ doing }>
                             Entrar
                         </Button>
                     </form>

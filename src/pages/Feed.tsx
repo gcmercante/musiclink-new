@@ -6,7 +6,7 @@ export function Feed() {
     const { user } = useAuth();
     return (
         <div>
-            <div>{ user?.id }</div>
+            <div>{ JSON.stringify(user) }</div>
             <Link to="/">Voltar</Link>
         </div>
     );

@@ -1,8 +1,9 @@
-import { FormEvent } from 'react';
+import { FormEvent, useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 
 import { useAuth } from '../hooks/useAuth';
 import { googleAuth } from '../services/authProviders';
+import { emailAuth } from '../services/authProviders';
 
 import { Button } from '../components/Button';
 
@@ -11,22 +12,46 @@ import logoImg from '../assets/images/musiclink-logo2.svg';
 import googleImg from '../assets/images/google-icon.svg'
 import '../styles/auth.scss';
 
+type LoginType = {
+    email?: string,
+    password?: string,
+};
+
 
 export function Login() {
     const history = useHistory();
     const { user, signIn } = useAuth();
+    const [ login, setLogin ] = useState<LoginType>();
+    const [ doing, setDoing ] = useState<boolean>();
+    const [ error, setError ] = useState<boolean>();
+    const [ emailError, setEmailError ] = useState<boolean>();
 
     async function handleGoogleLogin() {
-        if (!user) {
-            await signIn(googleAuth, 'Google');
+        try {
+            if (!user) {
+                setError(false);
+                await signIn(googleAuth, 'google');
+            }
+    
+            history.push('/feed');
+        } catch {
+            setError(true);
         }
-
-        history.push('/feed');
     }
 
     async function handleEmailLogin(event:FormEvent) {
         event.preventDefault();
-        history.push('/feed');
+        try {
+            if(!user) {
+                setEmailError(false);
+                setDoing(true);
+                await signIn(emailAuth, 'email', login);
+            }
+            history.push('/feed');
+        } catch {
+            setEmailError(true);
+        }
+        setDoing(false);        
     }
     return (
         <div id="page-auth">
@@ -40,14 +65,20 @@ export function Login() {
                     <img src={logoImg} alt="Musiclink" />
                     <form onSubmit={handleEmailLogin}>
                         <input 
-                            type="text"
+                            type="email"
                             placeholder="Email"
+                            style={ emailError ? { borderColor: "red" } : {}}
+                            onChange={e => setLogin({ ...login, email: e.target.value })}
+                            required
                         />
                         <input 
-                            type="text"
+                            type="password"
                             placeholder="Senha"
+                            style={ emailError ? { borderColor: "red" } : {}}
+                            onChange={e => setLogin({ ...login, password: e.target.value })}
+                            required
                         />
-                        <Button type="submit">
+                        <Button disabled={ doing } type="submit">
                             Entrar
                         </Button>
                     </form>
