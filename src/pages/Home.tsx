@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
 import { useAuth } from '../hooks/useAuth';
@@ -14,17 +15,26 @@ import '../styles/auth.scss';
 export function Home() {
     const history = useHistory();
     const { user, signIn } = useAuth();
+    const [ error, setError ] = useState<boolean>();
+    const [ loading, setLoading ] = useState<boolean>();
 
     function navigate(path: string) {
         history.push(path);
     }
 
     async function handleGoogleLogin() {
-        if (!user) {
-            await signIn(googleAuth, 'google');
+        try {
+            if (!user) {
+                setError(false);
+                setLoading(true);
+                await signIn(googleAuth, 'google');
+            }
+    
+            history.push('/feed');
+        } catch {
+            setError(true);
         }
-
-        history.push('/feed');
+        setLoading(false);
     }
 
     return (
@@ -37,15 +47,15 @@ export function Home() {
             <main>
                 <div className="main-content">
                     <img src={logoImg} alt="Musiclink" />
-                    <button className="google-login" onClick={handleGoogleLogin}>
+                    <button disabled={loading} className="google-login" onClick={handleGoogleLogin}>
                         <img src={googleImg} alt="Logo do Google" />
                         Login com a conta Google
                     </button>
-                    <Button onClick={() => navigate('/login')}>
+                    <Button disabled={loading} onClick={() => navigate('/login')}>
                         Login com email e senha
                     </Button>
                     <div className="separator">ou crie uma conta</div>
-                    <Button onClick={() => navigate('/signup')}>
+                    <Button disabled={loading} onClick={() => navigate('/signup')}>
                         Criar conta
                     </Button>
                 </div>

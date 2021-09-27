@@ -4,7 +4,7 @@ import { Link, useHistory } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import { googleAuth } from '../services/authProviders';
 
-import { EmailUser } from '../contexts/AuthContext';
+import { EmailUser } from '../services/types';
 import { Button } from '../components/Button';
 
 import logoSolo from '../assets/images/musiclink-logo-solo2.svg';

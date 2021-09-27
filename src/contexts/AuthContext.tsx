@@ -1,33 +1,6 @@
-import { createContext, ReactNode, useEffect, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import { auth, firebase } from "../services/firebase";
-
-type User = {
-    id: string,
-    name: string | null,
-    avatar: string | null,
-    providerId?: string
-}
-
-export type EmailUser = {
-    email?: string,
-    password?: string,
-    name?: string,
-    birthday?: string
-}
-
-type AuthContextType = {
-    user: User | undefined,
-    signIn: (provider: firebase.auth.AuthProvider, providerType: string, user?: EmailUser) => Promise<void>,
-    signUp: ({ email, password }: EmailUser) => Promise<void>
-}
-
-type AuthContextProviderProps = {
-    children: ReactNode
-}
-
-type AuthProvidersType = {
-    [key: string]: (user: firebase.User) => void;
-}
+import { AuthContextProviderProps, AuthContextType, AuthProvidersType, EmailUser, User } from "../services/types";
 
 export const AuthContext = createContext({} as AuthContextType);
 

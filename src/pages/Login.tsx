@@ -2,21 +2,17 @@ import { FormEvent, useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 
 import { useAuth } from '../hooks/useAuth';
+import { LoginType } from '../services/types';
 import { googleAuth } from '../services/authProviders';
 import { emailAuth } from '../services/authProviders';
 
+import { Alert } from '../components/Alert';
 import { Button } from '../components/Button';
 
 import logoSolo from '../assets/images/musiclink-logo-solo2.svg';
 import logoImg from '../assets/images/musiclink-logo2.svg';
 import googleImg from '../assets/images/google-icon.svg'
 import '../styles/auth.scss';
-
-type LoginType = {
-    email?: string,
-    password?: string,
-};
-
 
 export function Login() {
     const history = useHistory();
@@ -42,11 +38,9 @@ export function Login() {
     async function handleEmailLogin(event:FormEvent) {
         event.preventDefault();
         try {
-            if(!user) {
-                setEmailError(false);
-                setDoing(true);
-                await signIn(emailAuth, 'email', login);
-            }
+            setEmailError(false);
+            setDoing(true);
+            await signIn(emailAuth, 'email', login);
             history.push('/feed');
         } catch {
             setEmailError(true);
@@ -63,17 +57,18 @@ export function Login() {
             <main>
                 <div className="main-content">
                     <img src={logoImg} alt="Musiclink" />
+                    <Alert text="Email e/ou senha incorretos"/>
                     <form onSubmit={handleEmailLogin}>
                         <input 
                             type="email"
-                            placeholder="Email"
+                            placeholder="Email *"
                             style={ emailError ? { borderColor: "red" } : {}}
                             onChange={e => setLogin({ ...login, email: e.target.value })}
                             required
                         />
                         <input 
                             type="password"
-                            placeholder="Senha"
+                            placeholder="Senha *"
                             style={ emailError ? { borderColor: "red" } : {}}
                             onChange={e => setLogin({ ...login, password: e.target.value })}
                             required
