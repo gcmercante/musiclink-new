@@ -1,0 +1,115 @@
+#feed-page {
+    > header {
+        padding: 5px;
+        border-bottom: 1px solid #e2e2e2;
+        background-color: #262626;
+
+        .content {
+            max-width: 900px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            > img {
+                max-height: 55px;
+            }
+
+            > input {
+                border: 1px solid #262626;
+                border-radius: 3px;
+                height: 35px;
+                padding: 0 16px;
+                
+                &:focus{
+                    box-shadow: 0 0 0 2px #EB9D0E;
+                    border: none;
+                    outline: none;
+                }
+            }
+
+            > div {
+                display: flex;
+                gap: 16px;
+
+                button {
+                    padding: 5px 10px;
+                    max-height: 36px;
+                }
+            }
+        }
+    }
+    .main-content {
+        display: flex;
+        max-width: 900px;
+        margin: 32px auto;
+        justify-content: space-between;
+        main {      
+            flex: 2;
+            max-width: 570px;
+            form {
+                border: 1px solid #e2e2e2;
+                border-radius: 8px;
+                textarea {
+                    border-radius: 8px 8px 0 0;
+                    width: 100%;
+                    padding: 16px;
+                    background: #f8f8f8;
+                    resize: none;
+                    min-height: 130px;
+                    margin-bottom: 5px;
+                    border: 0;
+                    border-bottom: 1px solid #e2e2e2;
+                    &:focus {
+                        box-shadow: none;
+                        border: none;
+                        border-bottom: 1px solid #e2e2e2;
+                        outline: none;
+                    }
+                }
+                &:focus {
+                    box-shadow: 0 0 0 2px #EB9D0E;
+                    border: none;
+                    outline: none;
+                }
+        
+              .form-footer {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 0 16px 10px;
+                > button {
+                  height: 40px;
+                }
+              }
+
+            }
+            .separator {
+                font-size: 14px;
+                color: #a8a8b3;
+                margin: 32px 0;
+                display: flex;
+                align-items: center;
+                background: #e2e2e2;
+                height:1px;
+            }
+        }
+        aside {
+            flex: 1;
+            min-width: 300px;
+            max-height: 600px;
+            position: fixed;
+            right: 0;
+            margin-right: 220px;
+            .secondary-content {
+                min-height: 500px;
+            }
+
+            > footer {
+                color: #bdbdbd;
+                font-size: 12px;
+                text-align: center;
+            }
+        }
+    }
+}

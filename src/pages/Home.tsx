@@ -15,7 +15,6 @@ import '../styles/auth.scss';
 export function Home() {
     const history = useHistory();
     const { user, signIn } = useAuth();
-    const [ error, setError ] = useState<boolean>();
     const [ loading, setLoading ] = useState<boolean>();
 
     function navigate(path: string) {
@@ -23,17 +22,12 @@ export function Home() {
     }
 
     async function handleGoogleLogin() {
-        try {
-            if (!user) {
-                setError(false);
-                setLoading(true);
-                await signIn(googleAuth, 'google');
-            }
-    
-            history.push('/feed');
-        } catch {
-            setError(true);
+        if (!user) {
+            setLoading(true);
+            await signIn(googleAuth, 'google');
         }
+
+        history.push('/feed');
         setLoading(false);
     }
 
@@ -51,7 +45,7 @@ export function Home() {
                         <img src={googleImg} alt="Logo do Google" />
                         Login com a conta Google
                     </button>
-                    <Button disabled={loading} onClick={() => navigate('/login')}>
+                    <Button disabled={loading} onClick={() => !user ? navigate('/login') : navigate('/feed')}>
                         Login com email e senha
                     </Button>
                     <div className="separator">ou crie uma conta</div>

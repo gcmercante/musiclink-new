@@ -18,7 +18,8 @@ export type EmailUser = {
 export type AuthContextType = {
     user: User | undefined,
     signIn: (provider: firebase.auth.AuthProvider, providerType: string, user?: EmailUser) => Promise<void>,
-    signUp: ({ email, password }: EmailUser) => Promise<void>
+    signUp: ({ email, password }: EmailUser) => Promise<void>,
+    signOut: () => Promise<void>
 }
 
 export type AuthContextProviderProps = {
@@ -38,6 +39,10 @@ export type LoginType = {
     password?: string,
 };
 
-export type CustomError = {
+export type ErrorHandlerType = {
     text: object
+}
+
+export type ProvidersType = {
+    [key: string]: string
 }

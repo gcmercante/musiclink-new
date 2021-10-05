@@ -5,6 +5,7 @@ import { useAuth } from '../hooks/useAuth';
 import { LoginType } from '../services/types';
 import { googleAuth } from '../services/authProviders';
 import { emailAuth } from '../services/authProviders';
+import { ErrorHandler } from '../services/ErrorHandler';
 
 import { Alert } from '../components/Alert';
 import { Button } from '../components/Button';
@@ -19,33 +20,28 @@ export function Login() {
     const { user, signIn } = useAuth();
     const [ login, setLogin ] = useState<LoginType>();
     const [ doing, setDoing ] = useState<boolean>();
-    const [ error, setError ] = useState<boolean>();
-    const [ emailError, setEmailError ] = useState<boolean>();
+    const [ error, setError ] = useState<string>('');
 
     async function handleGoogleLogin() {
-        try {
-            if (!user) {
-                setError(false);
-                await signIn(googleAuth, 'google');
-            }
-    
-            history.push('/feed');
-        } catch {
-            setError(true);
+        if (!user) {
+            await signIn(googleAuth, 'google');
         }
+
+        history.push('/feed');
     }
 
     async function handleEmailLogin(event:FormEvent) {
         event.preventDefault();
         try {
-            setEmailError(false);
+            setError('');
             setDoing(true);
             await signIn(emailAuth, 'email', login);
             history.push('/feed');
-        } catch {
-            setEmailError(true);
+        } catch (err: any) {
+            setError(ErrorHandler(err.code));
+            setDoing(false);
         }
-        setDoing(false);        
+        setDoing(false);
     }
     return (
         <div id="page-auth">
@@ -57,19 +53,19 @@ export function Login() {
             <main>
                 <div className="main-content">
                     <img src={logoImg} alt="Musiclink" />
-                    <Alert text="Email e/ou senha incorretos"/>
+                    { error !== '' ? <Alert text={ error }/> : false }
                     <form onSubmit={handleEmailLogin}>
                         <input 
                             type="email"
                             placeholder="Email *"
-                            style={ emailError ? { borderColor: "red" } : {}}
+                            style={ error !== '' ? { borderColor: "red" } : {}}
                             onChange={e => setLogin({ ...login, email: e.target.value })}
                             required
                         />
                         <input 
                             type="password"
                             placeholder="Senha *"
-                            style={ emailError ? { borderColor: "red" } : {}}
+                            style={ error !== '' ? { borderColor: "red" } : {}}
                             onChange={e => setLogin({ ...login, password: e.target.value })}
                             required
                         />

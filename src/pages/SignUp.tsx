@@ -2,14 +2,16 @@ import { FormEvent, useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 
 import { useAuth } from '../hooks/useAuth';
-import { googleAuth } from '../services/authProviders';
-
 import { EmailUser } from '../services/types';
+import { googleAuth } from '../services/authProviders';
+import { ErrorHandler } from '../services/ErrorHandler';
+
+import { Alert } from '../components/Alert';
 import { Button } from '../components/Button';
 
-import logoSolo from '../assets/images/musiclink-logo-solo2.svg';
-import logoImg from '../assets/images/musiclink-logo2.svg';
 import googleImg from '../assets/images/google-icon.svg'
+import logoImg from '../assets/images/musiclink-logo2.svg';
+import logoSolo from '../assets/images/musiclink-logo-solo2.svg';
 
 import '../styles/auth.scss';
 
@@ -18,7 +20,7 @@ export function SignUp() {
     const { user, signIn, signUp } = useAuth();
     const [ info, setInfo ] = useState<EmailUser>();
     const [ doing, setDoing ] = useState<boolean>();
-    const [ error, setError ] = useState<boolean>();
+    const [ error, setError ] = useState<string>('');
 
     async function handleGoogleLogin() {
         if (!user) {
@@ -32,14 +34,15 @@ export function SignUp() {
         e.preventDefault();
         try {
             if(!user && info) {
-                setError(false);
+                setError('');
                 setDoing(true);
                 await signUp(info);
             }
     
             history.push('/feed');
-        } catch {
-            setError(true);
+        } catch(err: any) {
+            setError(ErrorHandler(err.code));
+            setDoing(false);
         }
         setDoing(false);
     }
@@ -54,6 +57,7 @@ export function SignUp() {
             <main>
                 <div className="main-content">
                     <img src={logoImg} alt="Musiclink" />
+                    { error !== '' ? <Alert text={ error }/> : false }
                     <button className="google-login-2" onClick={ handleGoogleLogin }>
                         <img src={googleImg} alt="Logo do Google" />
                         Criar conta com a conta Google
